@@ -12,11 +12,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PhoneDialerActivity extends AppCompatActivity {
 
+    private static final int CONTACTS_MANAGER_REQUEST_CODE = 1;
+
     private TextView phoneNumberEditText;
-    private ImageButton backSpaceImageButton, callImageButton, hangupImageButton;
+    private ImageButton backSpaceImageButton, callImageButton, hangupImageButton, contactsImageButton;
     private Button genericButton;
     private static final int REQUEST_CALL_PHONE = 1;
 
@@ -39,6 +42,7 @@ public class PhoneDialerActivity extends AppCompatActivity {
     private BackspaceButtonClickListener backspaceButtonClickListener = new BackspaceButtonClickListener();
     private CallButtonClickListener callButtonClickListener = new CallButtonClickListener();
     private HangupButtonClickListener hangupButtonClickListener = new HangupButtonClickListener();
+    private ContactsButtonClickListener contactsButtonClickListener = new ContactsButtonClickListener();
 
     private class GenericButtonClickListener implements View.OnClickListener {
 
@@ -85,6 +89,21 @@ public class PhoneDialerActivity extends AppCompatActivity {
         }
     }
 
+    private class ContactsButtonClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            String phoneNumber = phoneNumberEditText.getText().toString();
+            if (phoneNumber.length() > 0) {
+                Intent intent = new Intent("ro.pub.cs.systems.eim.lab04.contactsmanager.intent.action.ContactsManagerActivity");
+                intent.putExtra("ro.pub.cs.systems.eim.lab04.contactsmanager.PHONE_NUMBER_KEY", phoneNumber);
+                startActivityForResult(intent, CONTACTS_MANAGER_REQUEST_CODE);
+            } else {
+                Toast.makeText(getApplication(), getResources().getString(R.string.phone_error), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +113,7 @@ public class PhoneDialerActivity extends AppCompatActivity {
         backSpaceImageButton = (ImageButton) findViewById(R.id.backspace_button);
         callImageButton = (ImageButton) findViewById(R.id.call_button);
         hangupImageButton = (ImageButton) findViewById(R.id.hangup_button);
+        contactsImageButton = (ImageButton) findViewById(R.id.contacts_button);
 
         for (int index = 0; index < buttonIds.length; index++) {
             genericButton = (Button) findViewById(buttonIds[index]);
@@ -103,6 +123,7 @@ public class PhoneDialerActivity extends AppCompatActivity {
         backSpaceImageButton.setOnClickListener(backspaceButtonClickListener);
         callImageButton.setOnClickListener(callButtonClickListener);
         hangupImageButton.setOnClickListener(hangupButtonClickListener);
+        contactsImageButton.setOnClickListener(contactsButtonClickListener);
 
     }
 

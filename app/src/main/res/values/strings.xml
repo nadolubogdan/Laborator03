@@ -13,5 +13,6 @@
     <string name="number_9">9</string>
     <string name="star">*</string>
     <string name="pound">#</string>
+    <string name="phone_error">First introduce a phone number</string>
 
 </resources>
